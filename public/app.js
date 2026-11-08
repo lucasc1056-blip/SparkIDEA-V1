@@ -5,6 +5,7 @@ const examples = [
 ];
 const ideaForm = document.querySelector("#idea-form");
 const ideaInput = document.querySelector("#idea");
+const projectType = document.querySelector("#project-type");
 const generateButton = document.querySelector("#generate");
 const resultCard = document.querySelector("#result-card");
 const result = document.querySelector("#result");
@@ -29,7 +30,7 @@ ideaForm.addEventListener("submit", async (event) => {
   result.textContent = "SparkIDEA is thinking of something creative…";
   savedMessage.hidden = true;
   try {
-    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value }) });
+    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, projectType: projectType.value }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     result.textContent = data.result;

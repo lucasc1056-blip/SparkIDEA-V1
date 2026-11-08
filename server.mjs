@@ -14,9 +14,9 @@ const server = http.createServer(async (request, response) => {
     if (request.method === "POST" && request.url === "/api/generate") {
       let body = "";
       for await (const chunk of request) body += chunk;
-      const { idea } = JSON.parse(body || "{}");
+      const { idea, projectType } = JSON.parse(body || "{}");
       if (!idea?.trim()) return sendJson(response, 400, { error: "Please describe an idea or interest first." });
-      const result = await generateIdea(idea.trim());
+      const result = await generateIdea(idea.trim(), projectType);
       return sendJson(response, 200, { result });
     }
 

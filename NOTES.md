@@ -12,6 +12,7 @@
 - The server reads the key only from `.env`; the browser never receives it.
 - The app sends the full `BRIEF.md` as the AI’s instructions with each request and uses model `gpt-5.6-luna`.
 - A few made-up sample prompts are available, and saved ideas use browser `localStorage`.
+- The form now lets students choose Computer project or Physical project, and sends that choice to the AI.
 - Saves on this computer only for now.
 
 ## Maybe Later

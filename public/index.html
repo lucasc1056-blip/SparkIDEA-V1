@@ -14,6 +14,11 @@
     <section class="card" aria-labelledby="form-title">
       <h2 id="form-title">What do you want to explore?</h2>
       <form id="idea-form">
+        <label for="project-type">What kind of project?</label>
+        <select id="project-type">
+          <option value="Computer">Computer project</option>
+          <option value="Physical">Physical project</option>
+        </select>
         <label for="idea">Your starting idea or interest</label>
         <textarea id="idea" maxlength="500" placeholder="Example: I like plants, but I don’t know what to build." required></textarea>
         <button id="generate" type="submit">Generate Idea <span aria-hidden="true">→</span></button>

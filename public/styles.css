@@ -8,7 +8,8 @@ h2 { margin-top: 0; font-size: 1.2rem; }
 .intro { font-size: 1.2rem; max-width: 540px; color: #596273; }
 .card { background: rgba(255,255,255,.82); border: 1px solid #e3ded3; border-radius: 24px; padding: 28px; margin-top: 32px; box-shadow: 0 18px 50px rgba(57,43,24,.08); }
 label { display: block; font-weight: 700; margin: 20px 0 8px; }
-textarea { width: 100%; min-height: 130px; resize: vertical; border: 2px solid #d8d3c8; border-radius: 14px; padding: 15px; font: inherit; font-size: 1rem; background: #fffdf9; }
+textarea, select { width: 100%; border: 2px solid #d8d3c8; border-radius: 14px; padding: 15px; font: inherit; font-size: 1rem; background: #fffdf9; }
+textarea { min-height: 130px; resize: vertical; }
 textarea:focus { outline: 3px solid #f2c078; border-color: #c15432; }
 button { border: 0; border-radius: 999px; padding: 14px 21px; font: inherit; font-weight: 800; cursor: pointer; background: #c15432; color: white; margin-top: 16px; }
 button:hover { background: #9d3f27; } button:disabled { opacity: .55; cursor: wait; }
