@@ -20,7 +20,8 @@ const server = http.createServer(async (request, response) => {
       return sendJson(response, 200, { result });
     }
 
-    const requested = request.url === "/" ? "/index.html" : request.url;
+    const pathname = new URL(request.url, "http://localhost").pathname;
+    const requested = pathname === "/" ? "/index.html" : pathname;
     const filePath = normalize(join(publicDir, requested));
     if (!filePath.startsWith(publicDir)) return sendText(response, 404, "Not found");
     const file = await readFile(filePath);
