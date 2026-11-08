@@ -1,0 +1,12 @@
+{
+  "name": "sparkidea",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "openai": "^6.9.0"
+  }
+}
