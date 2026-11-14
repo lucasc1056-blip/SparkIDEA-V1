@@ -2,8 +2,18 @@ import { readFile } from "node:fs/promises";
 import OpenAI from "openai";
 
 const brief = await readFile(new URL("../BRIEF.md", import.meta.url), "utf8");
-const env = await readFile(new URL("../.env", import.meta.url), "utf8");
-const apiKey = env.match(/^OPENAI_API_KEY=(.*)$/m)?.[1]?.trim();
+let apiKey = process.env.OPENAI_API_KEY?.trim();
+
+// Local development fallback. Vercel supplies OPENAI_API_KEY through its
+// environment settings, so deployed functions never need to read .env.
+if (!apiKey) {
+  try {
+    const env = await readFile(new URL("../.env", import.meta.url), "utf8");
+    apiKey = env.match(/^OPENAI_API_KEY=(.*)$/m)?.[1]?.trim().replace(/^['"]|['"]$/g, "");
+  } catch {
+    // The local file is optional when the environment variable is present.
+  }
+}
 const model = "gpt-5.6-luna";
 
 export async function generateIdea(userIdea, projectType = "Computer") {

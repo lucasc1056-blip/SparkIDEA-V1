@@ -14,6 +14,8 @@
 - A few made-up sample prompts are available, and saved ideas use browser `localStorage`.
 - The form now lets students choose Computer project or Physical project, and sends that choice to the AI.
 - Saves on this computer only for now.
+- Vercel support is ready: the static page stays in `public/`, and `/api/generate` is a Vercel serverless function.
+- Online deployments read `OPENAI_API_KEY` from Vercel’s environment variables; the browser never receives it.
 
 ## Maybe Later
 
@@ -24,5 +26,14 @@
 ## What’s next
 
 - Try the main flow with a few safe interests and improve the wording based on feedback.
+
+## Put it online with Vercel
+
+1. Import the GitHub repository `lucasc1056-blip/SparkIDEA-V1` into Vercel.
+2. Leave the project settings at their defaults. Vercel serves the app from `public/` and runs `api/generate.js` at `/api/generate`.
+3. In Vercel Project Settings → Environment Variables, add `OPENAI_API_KEY` with the OpenAI API key as its value. Add it for Production (and Preview if desired). Do not upload `.env`.
+4. Deploy or redeploy. The frontend continues to save ideas in the browser’s `localStorage`; there is no database yet.
+
+For local development, keep using `.env` and `npm start`. The local server still serves the page and uses the same `src/openai.js` helper.
 
 OpenAI model with “luna” in its name: `gpt-5.6-luna`
