@@ -16,6 +16,7 @@
 - Saves on this computer only for now.
 - Vercel support is ready: the static page stays in `public/`, and `/api/generate` is a Vercel serverless function.
 - Online deployments read `OPENAI_API_KEY` from Vercel’s environment variables; the browser never receives it.
+- MVP verified locally: entering a subject such as `space` and choosing a project type returns an AI-generated project idea.
 
 ## Maybe Later
 
