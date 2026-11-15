@@ -14,6 +14,7 @@
 - A few made-up sample prompts are available, and saved ideas use browser `localStorage`.
 - The form now lets students choose Computer project or Physical project, and sends that choice to the AI.
 - The form now lets students list materials they have, alone or alongside an interest, and the AI uses them in the project idea.
+- Generated ideas now show a clear building-blocks list and 4-6 numbered steps.
 - Saves on this computer only for now.
 - Vercel support is ready: the static page stays in `public/`, and `/api/generate` is a Vercel serverless function.
 - Online deployments read `OPENAI_API_KEY` from Vercel’s environment variables; the browser never receives it.
