@@ -7,12 +7,12 @@ export default async function handler(request, response) {
 
   try {
     const body = typeof request.body === "string" ? JSON.parse(request.body || "{}") : (request.body || {});
-    const { idea, projectType } = body;
-    if (!idea?.trim()) {
-      return response.status(400).json({ error: "Please describe an idea or interest first." });
+    const { idea, materials, projectType } = body;
+    if (!idea?.trim() && !materials?.trim()) {
+      return response.status(400).json({ error: "Please enter an interest, some materials, or both." });
     }
 
-    const result = await generateIdea(idea.trim(), projectType);
+    const result = await generateIdea(idea?.trim(), projectType, materials?.trim());
     return response.status(200).json({ result });
   } catch (error) {
     console.error("Request failed:", error.message);

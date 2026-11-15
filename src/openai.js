@@ -16,13 +16,13 @@ if (!apiKey) {
 }
 const model = "gpt-5.6-luna";
 
-export async function generateIdea(userIdea, projectType = "Computer") {
+export async function generateIdea(userIdea = "", projectType = "Computer", materials = "") {
   if (!apiKey || apiKey === "paste-your-key-here") throw new Error("Missing OpenAI key");
   const client = new OpenAI({ apiKey });
   const response = await client.responses.create({
     model,
     instructions: `${brief}\n\nSafety requirement: Never suggest dangerous, illegal, or unsafe activities. If an idea could cause harm, replace it with a safe alternative and include: “AI may make mistakes. DO NOT TRUST DANGEROUS ACTIVITIES.” Be kind and encouraging.`,
-    input: `The student’s starting idea or interest is: ${userIdea}\nThey want a ${projectType.toLowerCase()} project. Make the generated idea fit that choice.`
+    input: `The student’s starting idea or interest is: ${userIdea || "(none provided)"}\nThe materials they already have are: ${materials || "(none listed)"}\nThey want a ${projectType.toLowerCase()} project. Make the generated idea fit that choice and use the listed materials when possible. If materials are listed, name how the project uses them.`
   });
   return response.output_text;
 }

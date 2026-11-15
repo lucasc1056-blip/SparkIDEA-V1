@@ -5,6 +5,7 @@ const examples = [
 ];
 const ideaForm = document.querySelector("#idea-form");
 const ideaInput = document.querySelector("#idea");
+const materialsInput = document.querySelector("#materials");
 const projectType = document.querySelector("#project-type");
 const generateButton = document.querySelector("#generate");
 const resultCard = document.querySelector("#result-card");
@@ -30,7 +31,7 @@ ideaForm.addEventListener("submit", async (event) => {
   result.textContent = "SparkIDEA is thinking of something creative…";
   savedMessage.hidden = true;
   try {
-    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, projectType: projectType.value }) });
+    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, materials: materialsInput.value, projectType: projectType.value }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     result.textContent = data.result;
@@ -44,7 +45,7 @@ ideaForm.addEventListener("submit", async (event) => {
 
 saveButton.addEventListener("click", () => {
   const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
-  saved.push({ startingIdea: ideaInput.value, result: result.textContent, savedAt: new Date().toISOString() });
+  saved.push({ startingIdea: ideaInput.value, materials: materialsInput.value, result: result.textContent, savedAt: new Date().toISOString() });
   localStorage.setItem(storageKey, JSON.stringify(saved));
   savedMessage.hidden = false;
 });
