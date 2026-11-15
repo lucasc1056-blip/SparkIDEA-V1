@@ -5,6 +5,7 @@ const examples = [
 ];
 const ideaForm = document.querySelector("#idea-form");
 const ideaInput = document.querySelector("#idea");
+const secondIdeaInput = document.querySelector("#second-idea");
 const materialsInput = document.querySelector("#materials");
 const projectType = document.querySelector("#project-type");
 const projectTime = document.querySelector("#project-time");
@@ -99,7 +100,8 @@ function renderFavorites() {
     const details = document.createElement("p");
     const time = favorite.projectTime ? `Time: ${favorite.projectTime}` : "Time not recorded";
     const materials = favorite.materials ? `Materials: ${favorite.materials}` : "No materials listed";
-    details.textContent = `${time} · ${materials}`;
+    const secondIdea = favorite.secondIdea ? `Second idea: ${favorite.secondIdea}` : "";
+    details.textContent = [time, materials, secondIdea].filter(Boolean).join(" · ");
     const idea = document.createElement("p");
     idea.textContent = favorite.result;
     const remove = document.createElement("button");
@@ -138,7 +140,7 @@ ideaForm.addEventListener("submit", async (event) => {
   result.textContent = "SparkIDEA is thinking of something creative…";
   savedMessage.hidden = true;
   try {
-    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, materials: materialsInput.value, projectType: projectType.value, projectTime: projectTime.value }) });
+    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, secondIdea: secondIdeaInput.value, materials: materialsInput.value, projectType: projectType.value, projectTime: projectTime.value }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     result.textContent = data.result;
@@ -158,7 +160,7 @@ printPlanButton.addEventListener("click", () => {
 
 saveButton.addEventListener("click", () => {
   const saved = getFavorites();
-  saved.push({ startingIdea: ideaInput.value, materials: materialsInput.value, projectTime: projectTime.value, result: result.textContent, savedAt: new Date().toISOString() });
+  saved.push({ startingIdea: ideaInput.value, secondIdea: secondIdeaInput.value, materials: materialsInput.value, projectTime: projectTime.value, result: result.textContent, savedAt: new Date().toISOString() });
   localStorage.setItem(storageKey, JSON.stringify(saved));
   savedMessage.hidden = false;
   renderFavorites();

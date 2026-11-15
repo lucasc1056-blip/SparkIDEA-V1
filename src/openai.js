@@ -21,7 +21,7 @@ Safety rules: Never provide instructions for explosions, weapons, dangerous expe
 
 Be kind and encouraging. Keep projects suitable for a student and recommend adult supervision when appropriate. Always format the response with IDEA, BUILDING BLOCKS, and STEPS sections. Put the idea first, list needed materials/tools/knowledge, and give 4-6 safe numbered steps.`;
 
-export async function generateIdea(userIdea = "", projectType = "Computer", materials = "", projectTime = "1 hour") {
+export async function generateIdea(userIdea = "", projectType = "Computer", materials = "", projectTime = "1 hour", secondIdea = "") {
   if (!apiKey || apiKey === "paste-your-key-here") throw new Error("Missing OpenAI key");
   const client = new OpenAI({ apiKey });
   const response = await client.responses.create({
