@@ -13,6 +13,8 @@ const resultCard = document.querySelector("#result-card");
 const result = document.querySelector("#result");
 const suppliesPanel = document.querySelector("#supplies-panel");
 const suppliesList = document.querySelector("#supplies-list");
+const printPlanButton = document.querySelector("#print-plan");
+const printPlanContent = document.querySelector("#print-plan-content");
 const saveButton = document.querySelector("#save");
 const savedMessage = document.querySelector("#saved");
 const favoritesEmpty = document.querySelector("#favorites-empty");
@@ -20,11 +22,26 @@ const favoritesList = document.querySelector("#favorites-list");
 const storageKey = "sparkidea-saved-ideas";
 
 function getSupplyItems(text) {
-  const section = text.match(/BUILDING BLOCKS:\s*([\s\S]*?)(?=\n\s*STEPS:|$)/i)?.[1] || "";
+  const section = getSection(text, "BUILDING BLOCKS", "STEPS");
   return section
     .split("\n")
     .map((line) => line.replace(/^\s*[-*•]\s*/, "").trim())
     .filter((line) => line && !/^building blocks:?$/i.test(line));
+}
+
+function getSection(text, heading, nextHeading) {
+  return text.match(new RegExp(`${heading}:\\s*([\\s\\S]*?)(?=\\n\\s*${nextHeading}:|$)`, "i"))?.[1] || "";
+}
+
+function getIdeaText(text) {
+  return getSection(text, "IDEA", "BUILDING BLOCKS").trim();
+}
+
+function getStepItems(text) {
+  return getSection(text, "STEPS", "END")
+    .split("\n")
+    .map((line) => line.replace(/^\s*\d+[.)]\s*/, "").trim())
+    .filter(Boolean);
 }
 
 function renderSupplyChecklist(text) {
@@ -42,6 +59,25 @@ function renderSupplyChecklist(text) {
     return item;
   }));
   suppliesPanel.hidden = supplies.length === 0;
+}
+
+function renderPrintPlan(text) {
+  const supplies = getSupplyItems(text);
+  const steps = getStepItems(text);
+  document.querySelector("#print-plan-details").textContent = `${projectType.value} project · ${projectTime.value}`;
+  document.querySelector("#print-plan-idea").textContent = getIdeaText(text) || text;
+  document.querySelector("#print-plan-supplies").replaceChildren(...supplies.map((supply) => {
+    const item = document.createElement("li");
+    item.textContent = supply;
+    return item;
+  }));
+  document.querySelector("#print-plan-steps").replaceChildren(...steps.map((step) => {
+    const item = document.createElement("li");
+    item.textContent = step;
+    return item;
+  }));
+  printPlanContent.dataset.ready = "true";
+  printPlanButton.disabled = false;
 }
 
 function getFavorites() {
@@ -97,6 +133,8 @@ ideaForm.addEventListener("submit", async (event) => {
   resultCard.hidden = false;
   suppliesPanel.hidden = true;
   suppliesList.replaceChildren();
+  printPlanContent.dataset.ready = "false";
+  printPlanButton.disabled = true;
   result.textContent = "SparkIDEA is thinking of something creative…";
   savedMessage.hidden = true;
   try {
@@ -105,12 +143,17 @@ ideaForm.addEventListener("submit", async (event) => {
     if (!response.ok) throw new Error(data.error);
     result.textContent = data.result;
     renderSupplyChecklist(data.result);
+    renderPrintPlan(data.result);
   } catch (error) {
     result.textContent = error.message || "I couldn’t make an idea right now. Please check the OpenAI key and your internet connection.";
   } finally {
     generateButton.disabled = false;
     generateButton.innerHTML = "Generate Idea <span aria-hidden=\"true\">→</span>";
   }
+});
+
+printPlanButton.addEventListener("click", () => {
+  if (printPlanContent.dataset.ready === "true") window.print();
 });
 
 saveButton.addEventListener("click", () => {

@@ -16,6 +16,7 @@
 - The form now lets students list materials they have, alone or alongside an interest, and the AI uses them in the project idea.
 - Generated ideas now show a clear building-blocks list and 4-6 numbered steps.
 - Generated ideas now show a checkable supply checklist based on their building blocks.
+- Generated ideas can now be printed as a one-page project plan.
 - AI instructions now keep responses on project ideation and refuse unsafe requests with safe alternatives.
 - Favorite ideas can be saved, viewed, and removed in the browser using localStorage; they stay on this computer.
 - Students can choose 15 minutes, 1 hour, a few days, or 1–2 weeks, and generated ideas are sized to fit that time.
