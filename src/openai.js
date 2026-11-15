@@ -21,13 +21,13 @@ Safety rules: Never provide instructions for explosions, weapons, dangerous expe
 
 Be kind and encouraging. Keep projects suitable for a student and recommend adult supervision when appropriate. Always format the response with IDEA, BUILDING BLOCKS, and STEPS sections. Put the idea first, list needed materials/tools/knowledge, and give 4-6 safe numbered steps.`;
 
-export async function generateIdea(userIdea = "", projectType = "Computer", materials = "") {
+export async function generateIdea(userIdea = "", projectType = "Computer", materials = "", projectTime = "1 hour") {
   if (!apiKey || apiKey === "paste-your-key-here") throw new Error("Missing OpenAI key");
   const client = new OpenAI({ apiKey });
   const response = await client.responses.create({
     model,
     instructions: `${brief}\n\n${appInstructions}`,
-    input: `The student’s starting idea or interest is: ${userIdea || "(none provided)"}\nThe materials they already have are: ${materials || "(none listed)"}\nThey want a ${projectType.toLowerCase()} project. Make the generated idea fit that choice and use the listed materials when possible.\n\nFormat your answer exactly with these sections and labels:\nIDEA: Give the project idea first in 1-2 sentences.\nBUILDING BLOCKS:\n- List the materials, tools, knowledge, or software needed. Include the student’s listed materials when relevant.\nSTEPS:\n1. Give the first safe, practical step.\n2. Give the next step.\n3. Give the next step.\n4. Give the next step.\nInclude 4-6 numbered steps total. Keep it suitable for a student, and do not suggest dangerous activities.`
+    input: `The student’s starting idea or interest is: ${userIdea || "(none provided)"}\nThe materials they already have are: ${materials || "(none listed)"}\nThey want a ${projectType.toLowerCase()} project and have ${projectTime} available. Make the idea, building blocks, and steps realistic for that amount of time. Use the listed materials when possible.\n\nFormat your answer exactly with these sections and labels:\nIDEA: Give the project idea first in 1-2 sentences and mention the estimated time.\nBUILDING BLOCKS:\n- List the materials, tools, knowledge, or software needed. Include the student’s listed materials when relevant.\nSTEPS:\n1. Give the first safe, practical step.\n2. Give the next step.\n3. Give the next step.\n4. Give the next step.\nInclude 4-6 numbered steps total. Keep it suitable for a student, and do not suggest dangerous activities.`
   });
   return response.output_text;
 }

@@ -7,6 +7,7 @@ const ideaForm = document.querySelector("#idea-form");
 const ideaInput = document.querySelector("#idea");
 const materialsInput = document.querySelector("#materials");
 const projectType = document.querySelector("#project-type");
+const projectTime = document.querySelector("#project-time");
 const generateButton = document.querySelector("#generate");
 const resultCard = document.querySelector("#result-card");
 const result = document.querySelector("#result");
@@ -33,7 +34,9 @@ function renderFavorites() {
     const heading = document.createElement("h3");
     heading.textContent = favorite.startingIdea || "Material-based idea";
     const details = document.createElement("p");
-    details.textContent = favorite.materials ? `Materials: ${favorite.materials}` : "No materials listed";
+    const time = favorite.projectTime ? `Time: ${favorite.projectTime}` : "Time not recorded";
+    const materials = favorite.materials ? `Materials: ${favorite.materials}` : "No materials listed";
+    details.textContent = `${time} · ${materials}`;
     const idea = document.createElement("p");
     idea.textContent = favorite.result;
     const remove = document.createElement("button");
@@ -68,7 +71,7 @@ ideaForm.addEventListener("submit", async (event) => {
   result.textContent = "SparkIDEA is thinking of something creative…";
   savedMessage.hidden = true;
   try {
-    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, materials: materialsInput.value, projectType: projectType.value }) });
+    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, materials: materialsInput.value, projectType: projectType.value, projectTime: projectTime.value }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     result.textContent = data.result;
@@ -82,7 +85,7 @@ ideaForm.addEventListener("submit", async (event) => {
 
 saveButton.addEventListener("click", () => {
   const saved = getFavorites();
-  saved.push({ startingIdea: ideaInput.value, materials: materialsInput.value, result: result.textContent, savedAt: new Date().toISOString() });
+  saved.push({ startingIdea: ideaInput.value, materials: materialsInput.value, projectTime: projectTime.value, result: result.textContent, savedAt: new Date().toISOString() });
   localStorage.setItem(storageKey, JSON.stringify(saved));
   savedMessage.hidden = false;
   renderFavorites();
