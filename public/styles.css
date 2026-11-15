@@ -17,6 +17,14 @@ button:hover { background: #9d3f27; } button:disabled { opacity: .55; cursor: wa
 .safety { color: #7a4b22; font-size: .85rem; margin-bottom: 0; }
 .result-card { border-color: #eab56e; } #result { white-space: pre-wrap; line-height: 1.65; font-size: 1.08rem; }
 .saved { color: #2d7a50; font-weight: 700; }
+.empty { color: #596273; margin-bottom: 0; }
+.favorites-list { display: grid; gap: 16px; }
+.favorite { border: 1px solid #ded8cb; border-radius: 16px; padding: 17px; background: #fffdf9; }
+.favorite h3 { margin: 0 0 8px; font-size: 1rem; }
+.favorite p { margin: 7px 0; white-space: pre-wrap; line-height: 1.5; }
+.favorite p:first-of-type { color: #596273; font-size: .9rem; }
+.remove-favorite { background: transparent; color: #9d3f27; border: 1px solid #d8a18f; padding: 8px 13px; margin-top: 8px; font-size: .85rem; }
+.remove-favorite:hover { background: #fff0eb; }
 .examples { margin: 44px 0; } .examples h2 { color: #596273; }
 #examples-list { display: flex; flex-wrap: wrap; gap: 10px; } .example { margin: 0; background: #fffdf9; color: #172033; border: 1px solid #ded8cb; padding: 10px 14px; font-size: .9rem; }
 @media (max-width: 560px) { .shell { padding-top: 36px; } .card { padding: 21px; } }
