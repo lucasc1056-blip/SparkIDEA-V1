@@ -11,11 +11,38 @@ const projectTime = document.querySelector("#project-time");
 const generateButton = document.querySelector("#generate");
 const resultCard = document.querySelector("#result-card");
 const result = document.querySelector("#result");
+const suppliesPanel = document.querySelector("#supplies-panel");
+const suppliesList = document.querySelector("#supplies-list");
 const saveButton = document.querySelector("#save");
 const savedMessage = document.querySelector("#saved");
 const favoritesEmpty = document.querySelector("#favorites-empty");
 const favoritesList = document.querySelector("#favorites-list");
 const storageKey = "sparkidea-saved-ideas";
+
+function getSupplyItems(text) {
+  const section = text.match(/BUILDING BLOCKS:\s*([\s\S]*?)(?=\n\s*STEPS:|$)/i)?.[1] || "";
+  return section
+    .split("\n")
+    .map((line) => line.replace(/^\s*[-*•]\s*/, "").trim())
+    .filter((line) => line && !/^building blocks:?$/i.test(line));
+}
+
+function renderSupplyChecklist(text) {
+  const supplies = getSupplyItems(text);
+  suppliesList.replaceChildren(...supplies.map((supply, index) => {
+    const item = document.createElement("li");
+    const label = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = `supply-${index}`;
+    const text = document.createElement("span");
+    text.textContent = supply;
+    label.append(checkbox, text);
+    item.append(label);
+    return item;
+  }));
+  suppliesPanel.hidden = supplies.length === 0;
+}
 
 function getFavorites() {
   try {
@@ -68,6 +95,8 @@ ideaForm.addEventListener("submit", async (event) => {
   generateButton.disabled = true;
   generateButton.textContent = "Thinking…";
   resultCard.hidden = false;
+  suppliesPanel.hidden = true;
+  suppliesList.replaceChildren();
   result.textContent = "SparkIDEA is thinking of something creative…";
   savedMessage.hidden = true;
   try {
@@ -75,6 +104,7 @@ ideaForm.addEventListener("submit", async (event) => {
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     result.textContent = data.result;
+    renderSupplyChecklist(data.result);
   } catch (error) {
     result.textContent = error.message || "I couldn’t make an idea right now. Please check the OpenAI key and your internet connection.";
   } finally {
