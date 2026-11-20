@@ -17,12 +17,14 @@ const riskWarning = document.querySelector("#risk-warning");
 const suppliesPanel = document.querySelector("#supplies-panel");
 const suppliesList = document.querySelector("#supplies-list");
 const printPlanButton = document.querySelector("#print-plan");
+const newIdeaButton = document.querySelector("#new-idea");
 const printPlanContent = document.querySelector("#print-plan-content");
 const saveButton = document.querySelector("#save");
 const savedMessage = document.querySelector("#saved");
 const favoritesEmpty = document.querySelector("#favorites-empty");
 const favoritesList = document.querySelector("#favorites-list");
 const storageKey = "sparkidea-saved-ideas";
+let requestDifferentIdea = false;
 
 function getSupplyItems(text) {
   const section = getSection(text, "BUILDING BLOCKS", "STEPS");
@@ -151,8 +153,10 @@ ideaForm.addEventListener("submit", async (event) => {
   printPlanButton.disabled = true;
   result.textContent = "SparkIDEA is thinking of something creative…";
   savedMessage.hidden = true;
+  const variation = requestDifferentIdea;
+  requestDifferentIdea = false;
   try {
-    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, secondIdea: secondIdeaInput.value, materials: materialsInput.value, projectType: projectType.value, projectTime: projectTime.value, difficulty: difficulty.value }) });
+    const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, secondIdea: secondIdeaInput.value, materials: materialsInput.value, projectType: projectType.value, projectTime: projectTime.value, difficulty: difficulty.value, variation }) });
     const data = await response.json();
     if (!response.ok) {
       if (data.error?.fix) console.error(data.error.fix);
@@ -162,12 +166,18 @@ ideaForm.addEventListener("submit", async (event) => {
     renderRiskWarning(data.result);
     renderSupplyChecklist(data.result);
     renderPrintPlan(data.result);
+    newIdeaButton.hidden = false;
   } catch (error) {
     result.textContent = error.message || "I couldn’t make an idea right now. Please check the OpenAI key and your internet connection.";
   } finally {
     generateButton.disabled = false;
     generateButton.innerHTML = "Generate Idea <span aria-hidden=\"true\">→</span>";
   }
+});
+
+newIdeaButton.addEventListener("click", () => {
+  requestDifferentIdea = true;
+  ideaForm.requestSubmit();
 });
 
 printPlanButton.addEventListener("click", () => {
