@@ -7,13 +7,13 @@ export default async function handler(request, response) {
 
   try {
     const body = typeof request.body === "string" ? JSON.parse(request.body || "{}") : (request.body || {});
-    const { idea, secondIdea, materials, projectType, projectTime } = body;
+    const { idea, secondIdea, materials, projectType, projectTime, difficulty } = body;
     if (!idea?.trim() && !secondIdea?.trim() && !materials?.trim()) {
       return response.status(400).json({ error: "Please enter an interest, some materials, or both." });
     }
 
     const combinedIdea = [idea?.trim(), secondIdea?.trim()].filter(Boolean).join("\n\nPlease combine this with the second idea above into one new project.");
-    const result = await generateIdea(combinedIdea, projectType, materials?.trim(), projectTime);
+    const result = await generateIdea(combinedIdea, projectType, materials?.trim(), projectTime, "", difficulty);
     return response.status(200).json({ result });
   } catch (error) {
     console.error("Request failed:", error?.fix || error?.message || "Unknown error");
