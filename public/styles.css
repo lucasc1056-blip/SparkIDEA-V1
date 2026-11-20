@@ -16,6 +16,9 @@ button:hover { background: #9d3f27; } button:disabled { opacity: .55; cursor: wa
 .secondary { background: #172033; } .secondary:hover { background: #303b52; }
 .safety { color: #7a4b22; font-size: .85rem; margin-bottom: 0; }
 .result-card { border-color: #eab56e; } #result { white-space: pre-wrap; line-height: 1.65; font-size: 1.08rem; }
+.risk-warning { margin-top: 24px; padding: 18px 20px; border: 2px solid #c15432; border-radius: 16px; background: #fff0e6; color: #6e281b; }
+.risk-warning strong { font-size: 1.05rem; }
+.risk-warning p { margin: 6px 0 0; line-height: 1.45; }
 .supplies-panel { margin-top: 26px; padding-top: 22px; border-top: 1px solid #e3ded3; }
 .supplies-panel h2 { margin-bottom: 6px; }
 .checklist-help { color: #596273; margin-top: 0; }

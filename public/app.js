@@ -12,6 +12,7 @@ const projectTime = document.querySelector("#project-time");
 const generateButton = document.querySelector("#generate");
 const resultCard = document.querySelector("#result-card");
 const result = document.querySelector("#result");
+const riskWarning = document.querySelector("#risk-warning");
 const suppliesPanel = document.querySelector("#supplies-panel");
 const suppliesList = document.querySelector("#supplies-list");
 const printPlanButton = document.querySelector("#print-plan");
@@ -43,6 +44,15 @@ function getStepItems(text) {
     .split("\n")
     .map((line) => line.replace(/^\s*\d+[.)]\s*/, "").trim())
     .filter(Boolean);
+}
+
+function hasRiskySteps(text) {
+  const riskyWords = /dangerous|explos|weapon|fire|flame|burn|chemical|poison|pressure|high voltage|mains electricity|self-harm|injur|illegal|damage property/i;
+  return getStepItems(text).some((step) => riskyWords.test(step));
+}
+
+function renderRiskWarning(text) {
+  riskWarning.hidden = !hasRiskySteps(text);
 }
 
 function renderSupplyChecklist(text) {
@@ -134,6 +144,7 @@ ideaForm.addEventListener("submit", async (event) => {
   generateButton.textContent = "Thinking…";
   resultCard.hidden = false;
   suppliesPanel.hidden = true;
+  riskWarning.hidden = true;
   suppliesList.replaceChildren();
   printPlanContent.dataset.ready = "false";
   printPlanButton.disabled = true;
@@ -142,8 +153,12 @@ ideaForm.addEventListener("submit", async (event) => {
   try {
     const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea: ideaInput.value, secondIdea: secondIdeaInput.value, materials: materialsInput.value, projectType: projectType.value, projectTime: projectTime.value }) });
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error);
+    if (!response.ok) {
+      if (data.error?.fix) console.error(data.error.fix);
+      throw new Error(data.error?.message || data.error || "I couldn’t make an idea right now.");
+    }
     result.textContent = data.result;
+    renderRiskWarning(data.result);
     renderSupplyChecklist(data.result);
     renderPrintPlan(data.result);
   } catch (error) {

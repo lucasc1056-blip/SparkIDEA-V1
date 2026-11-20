@@ -28,8 +28,8 @@ const server = http.createServer(async (request, response) => {
     response.writeHead(200, { "Content-Type": types[extname(filePath)] || "text/plain" });
     response.end(file);
   } catch (error) {
-    console.error("Request failed:", error.message);
-    if (request.url === "/api/generate") return sendJson(response, 500, { error: "I couldn’t make an idea right now. Please check the OpenAI key and your internet connection." });
+    console.error("Request failed:", error?.fix || error?.message || "Unknown error");
+    if (request.url === "/api/generate") return sendJson(response, 500, { error: { message: error?.message || "I couldn’t make an idea right now.", fix: error?.fix || "Check the server logs for details." } });
     sendText(response, 404, "Not found");
   }
 });

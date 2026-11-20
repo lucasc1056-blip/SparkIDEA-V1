@@ -16,7 +16,7 @@ export default async function handler(request, response) {
     const result = await generateIdea(combinedIdea, projectType, materials?.trim(), projectTime);
     return response.status(200).json({ result });
   } catch (error) {
-    console.error("Request failed:", error.message);
-    return response.status(500).json({ error: "I couldn’t make an idea right now. Please check the OpenAI key and your internet connection." });
+    console.error("Request failed:", error?.fix || error?.message || "Unknown error");
+    return response.status(500).json({ error: { message: error?.message || "I couldn’t make an idea right now.", fix: error?.fix || "Check the server logs for details." } });
   }
 }
